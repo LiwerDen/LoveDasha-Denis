@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моей любимой принцессе</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fce4ec;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #4a148c;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        /* КОНТЕЙНЕР ДЛЯ ТЕСТА */
+        #quiz-container {
+            max-width: 500px;
+            width: 90%;
+            padding: 40px;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            z-index: 20;
+        }
+
+        .btn-option {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #f48fb1;
+            background: white;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            color: #4a148c;
+        }
+
+        .btn-option:hover {
+            background: #fce4ec;
+            transform: scale(1.02);
+        }
+
+        /* ОСНОВНОЙ КОНТЕЙНЕР (ВАЛЕНТИНКА) */
+        #valentine-container {
+            display: none; /* Скрыт изначально */
+            max-width: 800px; 
+            width: 95%;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(216, 27, 96, 0.2);
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #d81b60;
+            margin-bottom: 10px;
+        }
+
+        /* ТВОЕ УВЕЛИЧЕННОЕ СЕРДЦЕ */
+        .heart-wrapper {
+            width: 550px;  
+            height: 550px; 
+            margin: 20px auto;
+            position: relative;
+            -webkit-mask-image: url('https://upload.wikimedia.org/wikipedia/commons/4/42/Love_Heart_SVG.svg');
+            mask-image: url('https://upload.wikimedia.org/wikipedia/commons/4/42/Love_Heart_SVG.svg');
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            -webkit-mask-position: center;
+            mask-position: center;
+            background-color: #eee;
+            transition: transform 0.3s ease;
+        }
+
+        .heart-wrapper:hover {
+            transform: scale(1.03);
+        }
+
+        .heart-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        p {
+            font-size: 1.2em;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .love-text {
+            color: #b71c1c;
+            font-weight: bold;
+            font-size: 1.5em;
+            margin-top: 15px;
+        }
+
+        /* АНИМАЦИЯ СЕРДЕЧЕК */
+        .falling-hearts {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            color: #f48fb1;
+            font-size: 20px;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        /* Адаптация под мобилки */
+        @media (max-width: 600px) {
+            .heart-wrapper {
+                width: 300px;
+                height: 300px;
+            }
+            h1 { font-size: 1.8em; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="falling-hearts" id="fallingHearts"></div>
+
+    <div id="quiz-container">
+        <h2 id="question-text">Загрузка вопроса...</h2>
+        <div id="options"></div>
+        <p id="feedback" style="margin-top: 20px; font-weight: bold; min-height: 24px;"></p>
+    </div>
+
+    <div id="valentine-container">
+        <h1>Дашулька, любимая! ✨</h1>
+        <p>Ты моё всё, самая лучшая и родная ❤️‍🔥</p>
+        
+        <div class="heart-wrapper">
+            <img src="IMG_20260422_204401.png" alt="Наше фото" class="heart-photo" onerror="this.src='https://via.placeholder.com/500x500?text=%D0%A4%D0%BE%D1%82%D0%BE+%D0%BD%D0%B5+%D0%BD%D0%B0%D0%B9%D0%B4%D0%B5%D0%BD%D0%BE';">
+        </div>
+
+        <p>Каждый день с тобой — это подарок. Ты делаешь меня самым счастливым человеком на свете.</p>
+        <p class="love-text">Я очень сильно люблю тебя! ❤️</p>
+        <p>Твой дениска</p>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                q: "Дата начала наших отношений?",
+                a: [{t: "25.05.24", v: true}, {t: "17.05.24", v: false}]
+            },
+            {
+                q: "Где мы первый раз поцеловались?",
+                a: [{t: "Возле школы", v: true}, {t: "В автобусе", v: false}]
+            },
+            {
+                q: "Любишь ли ты меня?",
+                a: [{t: "Да", v: true}, {t: "Нет", v: false}]
+            },
+            {
+                q: "Кто ты для меня?",
+                a: [{t: "Мой котеночек", v: true}, {t: "Принцесса", v: true}]
+            },
+            {
+                q: "Ты готова увидеть сюрприз?",
+                a: [{t: "Да", v: true}, {t: "Нет", v: false}]
+            }
+        ];
+
+        let currentQ = 0;
+
+        function loadQuestion() {
+            const qData = questions[currentQ];
+            document.getElementById('question-text').innerText = qData.q;
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            document.getElementById('feedback').innerText = '';
+
+            qData.a.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-option';
+                btn.innerText = opt.t;
+                btn.onclick = () => checkAnswer(opt.v);
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(isCorrect) {
+            const feedback = document.getElementById('feedback');
+            if (isCorrect) {
+                feedback.style.color = "#2e7d32";
+                feedback.innerText = "Ты умничка моя! ✨";
+                setTimeout(() => {
+                    currentQ++;
+                    if (currentQ < questions.length) {
+                        loadQuestion();
+                    } else {
+                        showValentine();
+                    }
+                }, 1000);
+            } else {
+                feedback.style.color = "#c62828";
+                feedback.innerText = "Палка капалка, попробуй еще раз! 😋";
+            }
+        }
+
+        function showValentine() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('valentine-container').style.display = 'block';
+        }
+
+        // Сердечки на фоне
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+            heart.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+            document.getElementById('fallingHearts').appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+
+        setInterval(createHeart, 300);
+        loadQuestion(); // Запуск теста
+    </script>
+</body>
+</html>
